@@ -1,3 +1,4 @@
 qemu
 *.bin
 *.exe
+*.o

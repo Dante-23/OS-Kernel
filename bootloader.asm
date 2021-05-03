@@ -1,38 +1,38 @@
 [org 0x7c00]
 KERNEL_MEMORY_LOCATION equ 0x1000			; Main memory address where kernel will be loaded
 
-mov bp, 0x9000
-mov sp, bp
+	mov bp, 0x9000								; Update stack pointer and base pointer. Not Needed
+	mov sp, bp
 
-mov bx, REAL_MODE_MESSAGE
-call Print
-call Print_nl
+	mov bx, REAL_MODE_MESSAGE
+	call Print
+	call Print_nl
 
-mov bx, KERNEL_LOAD_MESSAGE
-call Print
-call Print_nl
+	mov bx, KERNEL_LOAD_MESSAGE
+	call Print
+	call Print_nl
 
-call Load_Kernel
+	call Load_Kernel
 
-mov bx, KERNEL_LOAD_SUCCESS_MESSAGE
-call Print
-call Print_nl
+	mov bx, KERNEL_LOAD_SUCCESS_MESSAGE
+	call Print
+	call Print_nl
 
-mov bx, PROTECTED_MODE_MESSAGE
-call Print
-call Print_nl
+	mov bx, PROTECTED_MODE_MESSAGE
+	call Print
+	call Print_nl
 
-call Enter_Protected_Mode
-jmp $										; jmp to current address... Same as while(1);
+	call Enter_Protected_Mode
+	jmp $										; jmp to current address... Same as while(1);
 
 ; Includes start
 
-%include "essentials.asm"
-%include "print_string.asm"
-%include "disk_load.asm"
-%include "gdt.asm"
-%include "print_protected_mode.asm"
-%include "enter_protected_mode.asm"
+%include "asm_essentials/essentials.asm"
+%include "asm_essentials/print_string.asm"
+%include "asm_essentials/disk_load.asm"
+%include "asm_essentials/gdt.asm"
+%include "asm_essentials/print_protected_mode.asm"
+%include "asm_essentials/enter_protected_mode.asm"
 
 ; Includes end
 
@@ -45,10 +45,11 @@ Load_Kernel:
 
 [bits 32]
 Begin_PM:
-	mov ebx, PROTECTED_MODE_SUCCESS_MESSAGE
+	mov ebx, PROTECTED_MODE_SUCCESS_MESSAGE	
 	call Print_Protected_Mode
+	call KERNEL_MEMORY_LOCATION				; give control to the kernel.
 	; call Print_nl
-	jmp $
+	jmp $									; loop if the control is returned by the kernel
 
 ; CONTANTS and MESSAGES START
 
