@@ -1,0 +1,5 @@
+A20 line is not enabled. Check whether we can access more than 1 MB of memory.
+Check different Video memory addresses.
+Try writing a 16 bit kernel using 16 bit C compiler.
+Write keyboard and print driver.
+Write calculator and snake game with menus.
