@@ -4,13 +4,13 @@ KERNEL_MEMORY_LOCATION equ 0x1000			; Main memory address where kernel will be l
 	mov bp, 0x9000								; Update stack pointer and base pointer. Not Needed
 	mov sp, bp
 
-	mov bx, REAL_MODE_MESSAGE
-	call Print
-	call Print_nl
+	;mov bx, REAL_MODE_MESSAGE
+	;call Print
+	;call Print_nl
 
-	mov bx, KERNEL_LOAD_MESSAGE
-	call Print
-	call Print_nl
+	;mov bx, KERNEL_LOAD_MESSAGE
+	;call Print
+	;call Print_nl
 
 	call Load_Kernel
 
@@ -20,8 +20,7 @@ KERNEL_MEMORY_LOCATION equ 0x1000			; Main memory address where kernel will be l
 ; ---------------------------------------------------------------
 ; ---------------------------------------------------------------
 
-
-	call detect_memory
+	;call detect_memory
 	; mov bx, MESSAGE
 	; call Print
 	; call Print_nl
@@ -30,7 +29,6 @@ KERNEL_MEMORY_LOCATION equ 0x1000			; Main memory address where kernel will be l
 	; mov dx, bx
 	; call print_hex
 	; jmp $
-%include "memory/memory.asm"
 ; MESSAGE db "HELLO", 0
 
 
@@ -42,19 +40,20 @@ KERNEL_MEMORY_LOCATION equ 0x1000			; Main memory address where kernel will be l
 ; ---------------------------------------------------------------
 
 	; mov bx, KERNEL_LOAD_SUCCESS_MESSAGE
-	; call Print
-	; call Print_nl
+	 ;call Print
+	 ;call Print_nl
 
-	; mov bx, PROTECTED_MODE_MESSAGE
-	; call Print
-	; call Print_nl
-
+	 ;mov bx, PROTECTED_MODE_MESSAGE
+	 ;call Print
+	 ;call Print_nl
+	 
 	call Enter_Protected_Mode
 	jmp $										; jmp to current address... Same as while(1);
 
 ; Includes start
 
-;%include "asm_essentials/essentials.asm"
+%include "memory/memory.asm"
+%include "asm_essentials/essentials.asm"
 %include "asm_essentials/print_string.asm"
 %include "asm_essentials/disk_load.asm"
 %include "asm_essentials/gdt.asm"
@@ -84,11 +83,10 @@ Begin_PM:
 
 DISK_LOADING_MESSAGE db "Loading from disk", 0
 REAL_MODE_MESSAGE db "Loading in real mode", 0
-KERNEL_LOAD_MESSAGE db "Loading kernel in real mode", 0
-KERNEL_LOAD_SUCCESS_MESSAGE db "Successfully loaded kernel", 0
-PROTECTED_MODE_MESSAGE db "Going to protected mode", 0
+;KERNEL_LOAD_MESSAGE db "Loading kernel in real mode", 0
+;KERNEL_LOAD_SUCCESS_MESSAGE db "Successfully loaded kernel", 0
+;PROTECTED_MODE_MESSAGE db "Going to protected mode", 0
 PROTECTED_MODE_SUCCESS_MESSAGE db "Successfully entered protected mode", 0
-
 ; CONTANTS and MESSAGES END
 
 times 510-($-$$) db 0

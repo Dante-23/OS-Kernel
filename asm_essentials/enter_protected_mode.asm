@@ -1,5 +1,13 @@
 [bits 16]
 Enter_Protected_Mode:
+	call detect_memory
+	call copy
+	mov cx, [0x6000]
+	call print_hex
+	;call function
+	;mov cx, [memory]
+	;call print_hex
+	call EnableA20
     cli                                 ; disable interrupts
     lgdt [gdt_descriptor]               ; load the gdt descriptor
     mov eax, cr0                        ; cr0 = 1
@@ -8,7 +16,6 @@ Enter_Protected_Mode:
     jmp CODE_SEG:init_pm                ; Jump to address gdt[CODE_SEG] + init_pm
 
 ; CODE_SEG is the index in the gdt.
-
 
 ; operating in 32 bit protected mode
 [bits 32]
@@ -24,3 +31,4 @@ init_pm:
     mov esp, ebp
 
     call Begin_PM
+
