@@ -4,6 +4,8 @@
 #define KERNEL_CS 0x08
 #define IDT_ENTRIES 256
 
+long long timer_counter = 0;
+
 typedef struct {
     unsigned short low_offset; /* Lower 16 bits of handler function address */
     unsigned short sel; /* Kernel segment selector */
@@ -236,10 +238,18 @@ void isr_handler(registers_t r) {
 }
 
 void irq_handler(registers_t r){
-    print_string("received interrupt irq_handler");
-    char s[3];
-    int_to_ascii(r.int_no, s);
-    print_string(s);
-    print_string("\n");
+    if(r.int_no == 32){
+        timer_counter++;
+    }
+    else{
+        char s[3];
+        int_to_ascii(r.int_no, s);
+        print_string(s);
+    }
+    // print_string("received interrupt irq_handler");
+    // char s[3];
+    // int_to_ascii(r.int_no, s);
+    // print_string(s);
+    // print_string("\n");
     outputbyte(0x20, 0x20); // EOI command to primary controller
 }

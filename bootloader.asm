@@ -14,20 +14,47 @@ KERNEL_MEMORY_LOCATION equ 0x1000			; Main memory address where kernel will be l
 
 	call Load_Kernel
 
-	mov bx, KERNEL_LOAD_SUCCESS_MESSAGE
-	call Print
-	call Print_nl
+; ---------------------------------------------------------------
+; ---------------------------------------------------------------
+; Extra testing code start
+; ---------------------------------------------------------------
+; ---------------------------------------------------------------
 
-	mov bx, PROTECTED_MODE_MESSAGE
-	call Print
-	call Print_nl
+
+	call detect_memory
+	; mov bx, MESSAGE
+	; call Print
+	; call Print_nl
+	; mov dx, ax
+	; call print_hex
+	; mov dx, bx
+	; call print_hex
+	; jmp $
+%include "memory/memory.asm"
+; MESSAGE db "HELLO", 0
+
+
+
+; ---------------------------------------------------------------
+; ---------------------------------------------------------------
+; Extra testing code end
+; ---------------------------------------------------------------
+; ---------------------------------------------------------------
+
+	; mov bx, KERNEL_LOAD_SUCCESS_MESSAGE
+	; call Print
+	; call Print_nl
+
+	; mov bx, PROTECTED_MODE_MESSAGE
+	; call Print
+	; call Print_nl
 
 	call Enter_Protected_Mode
 	jmp $										; jmp to current address... Same as while(1);
 
 ; Includes start
 
-%include "asm_essentials/essentials.asm"
+;%include "asm_essentials/essentials.asm"
 %include "asm_essentials/print_string.asm"
 %include "asm_essentials/disk_load.asm"
 %include "asm_essentials/gdt.asm"
