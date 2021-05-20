@@ -1,5 +1,7 @@
 #pragma once
 #include "IO.c"
+#include "../memory/buffers.c"
+#include "essentials.c"
 
 #define VGA_MEMORY (unsigned char*)0xb8000
 #define ROWS 25
@@ -41,4 +43,21 @@ void clear_screen(){
 	for(unsigned short i = 0; i < ROWS * COLUMNS; i++){
 		*(VGA_MEMORY + i * 2) = ' ';
 	}
+}
+
+char* hex_to_string(int number){
+    int mask = 0x0000000f;
+    int index = 0;
+    for(int i = 0; i <= 28; i += 4){
+        int value = (number & mask);
+        value = (value >> i);
+        if(value >= 0 && value <= 9) value = (value + 48);
+        else value += 55;
+        mask = (mask << 4);
+        hex_string[index++] = (char)value;
+    }
+    int size = strlen(hex_string);
+    reverse(hex_string, size);
+    hex_string[index++] = '\0';
+    return hex_string;
 }

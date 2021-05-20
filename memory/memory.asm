@@ -27,19 +27,12 @@ loop_finished:
 		popa                            ; try poping registers off stack
 		ret
 
-EnableA20:
-	in al, 0x92
-	or al, 2
-	out 0x92, al
-	ret
-
 copy:
 	pusha
-	mov bx, [memory]
-	mov word [0x6000], bx
+	mov bl, [memory]
+	mov byte [0x6000], bl
 	popa
 	ret
 
 memory dw 0x0
 testing db "ZZ", 0
-location dw 0x6000

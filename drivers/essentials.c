@@ -1,3 +1,5 @@
+#pragma once
+
 #define get_low_16(address) (unsigned short)((address) & 0xFFFF)
 #define get_high_16(address) (unsigned short)(((address) >> 16) & 0xFFFF)
 

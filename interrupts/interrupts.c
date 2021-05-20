@@ -4,7 +4,7 @@
 #define KERNEL_CS 0x08
 #define IDT_ENTRIES 256
 
-long long timer_counter = 0;
+int timer_counter = 0;
 
 typedef struct {
     unsigned short low_offset; /* Lower 16 bits of handler function address */
@@ -100,7 +100,8 @@ void set_idt() {
     idt_reg.base = (unsigned int) &idt;
     idt_reg.limit = IDT_ENTRIES * sizeof(idt_gate_t) - 1;
     /* Don't make the mistake of loading &idt -- always load &idt_reg */
-    __asm__ __volatile__("lidtl (%0)" : : "r" (&idt_reg));
+    // __asm__ __volatile__("lidtl (%0)" : : "r" (&idt_reg));
+    __asm__ ("lidt %0" : : "m" (idt_reg));
 }
 
 void isr_install() {

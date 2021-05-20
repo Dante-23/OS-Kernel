@@ -1,13 +1,12 @@
 // #include "drivers/print_string.c"
 #include "interrupts/interrupts.c"
-
-unsigned short* memory_regions = (unsigned short*)(0x6000);
+#include "memory/memory.c"
 
 int _main(){
 	isr_install();
 	unsigned short position = Get_Cursor_Position_From_Coord(0,0);
     Set_Cursor_Position(position);
-    //clear_screen();
+    clear_screen();
     __asm__ __volatile__("int $2");
     __asm__ __volatile__("int $3");
 	asm volatile("sti");
@@ -16,6 +15,14 @@ int _main(){
 	int_to_ascii(*memory_regions, s);
 	print_string(s);
 	print_string("\n");
+	print_string("Testing");
+	print_string("\n");
+	
+	for(unsigned char i = 0; i < *memory_regions; i++){
+		struct Memory_Map* mp = (struct Memory_Map*)0x5000;
+		mp += i;
+		print_memory_map(mp, Cursor_Position);
+	}
 	// print_string("hsdkashdkashdkajshdkajsdhkjashdkjashdkjashdjkahdkjahsdkjashdjkashdthethehehehhetiyoyoyouoouooyoyoyoyo", position);
 }
 

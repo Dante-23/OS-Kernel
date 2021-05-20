@@ -17,6 +17,12 @@ Enter_Protected_Mode:
 
 ; CODE_SEG is the index in the gdt.
 
+EnableA20:
+	in al, 0x92
+	or al, 2
+	out 0x92, al
+	ret
+
 ; operating in 32 bit protected mode
 [bits 32]
 init_pm:

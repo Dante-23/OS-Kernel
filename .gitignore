@@ -1,4 +1,5 @@
 qemu
+test
 *.bin
 *.exe
 *.o
