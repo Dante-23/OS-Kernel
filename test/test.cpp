@@ -29,6 +29,7 @@ char* int_to_string(int number){
         number = number / 10;
     }
     int size = strlen(buffer);
+    reverse(buffer, size);
     buffer[index++] = '\0';
     return buffer;
 }

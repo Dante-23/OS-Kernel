@@ -17,6 +17,13 @@ int _main(){
 	print_string("\n");
 	print_string("Testing");
 	print_string("\n");
+
+	int number = 0x512;
+	print_string(hex_to_string(number));
+	print_string("\n");
+
+	print_string(int_to_string(number));
+	print_string("\n");
 	
 	for(unsigned char i = 0; i < *memory_regions; i++){
 		struct Memory_Map* mp = (struct Memory_Map*)0x5000;

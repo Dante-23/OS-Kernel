@@ -56,8 +56,23 @@ char* hex_to_string(int number){
         mask = (mask << 4);
         hex_string[index++] = (char)value;
     }
+    hex_string[index++] = 'x';
+    hex_string[index++] = '0';
     int size = strlen(hex_string);
     reverse(hex_string, size);
     hex_string[index++] = '\0';
     return hex_string;
+}
+
+char* int_to_string(int number){
+    int index = 0;
+    while(number > 0){
+        int value = number % 10;
+        int_string[index++] = (char)(value + 48);
+        number = number / 10;
+    }
+    int size = strlen(int_string);
+    reverse(int_string, size);
+    int_string[index++] = '\0';
+    return int_string;
 }
