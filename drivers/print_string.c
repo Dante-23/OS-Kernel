@@ -3,12 +3,6 @@
 #include "../memory/buffers.c"
 #include "essentials.c"
 
-#define VGA_MEMORY (unsigned char*)0xb8000
-#define ROWS 25
-#define COLUMNS 80
-
-unsigned short Cursor_Position = 0;
-
 void Set_Cursor_Position(unsigned short position){
     outputbyte(0x3D4, 0x0F);
     outputbyte(0x3D5, (unsigned char)(position & 0xFF));
@@ -21,21 +15,34 @@ unsigned short Get_Cursor_Position_From_Coord(unsigned char x, unsigned char y){
 	return x * COLUMNS + y;
 }
 
+void print_char(unsigned char character){
+    if(character == '\n'){
+        Cursor_Position += COLUMNS;
+        Cursor_Position -= (Cursor_Position % COLUMNS);
+        scroll_screen();
+    }
+    else{
+        *(VGA_MEMORY + Cursor_Position * 2) = character;
+        Cursor_Position++;
+        scroll_screen();
+    }
+}
+
 void print_string(unsigned char* str){
 	unsigned char* ptr = (unsigned char*)str;
-	unsigned short index = Cursor_Position;
 	while(*ptr != 0){
 		if(*ptr == '\n'){
-			index += COLUMNS;
-			index -= (index % COLUMNS);
+			Cursor_Position += COLUMNS;
+			Cursor_Position -= (Cursor_Position % COLUMNS);
 			ptr++;
+            scroll_screen();
 			continue;
 		}
-		*(VGA_MEMORY + index * 2) = *ptr;
+		*(VGA_MEMORY + Cursor_Position * 2) = *ptr;
 		ptr++;
-		index++;
+		Cursor_Position++;
+        scroll_screen();
 	}
-	Cursor_Position = index;
 }
 
 void clear_screen(){
@@ -75,4 +82,9 @@ char* int_to_string(int number){
     reverse(int_string, size);
     int_string[index++] = '\0';
     return int_string;
+}
+
+void print(unsigned char* str){
+    print_string(str);
+    // scroll_screen();
 }

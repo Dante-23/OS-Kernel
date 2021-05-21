@@ -1,38 +1,34 @@
 #pragma once
 #include "../drivers/print_string.c"
-
-struct Memory_Map{
-    unsigned long long base_address;
-    unsigned long long region_length;
-    unsigned int region_type;
-    unsigned int extended_attributes;
-};
-
-unsigned char* memory_regions = (unsigned char*)(0x6000);
+#include "buffers.c"
 
 void print_memory_map(struct Memory_Map* memory_map, unsigned short position){
-    Set_Cursor_Position(position);
+    // Set_Cursor_Position(position);
 
-    print_string("Memory Base: ");
+    print("Memory Base: ");
     char a[10];
     int_to_ascii(memory_map->base_address, a);
-    print_string(a);
+    print(a);
 
-    Set_Cursor_Position(position + 80);
+    print("\n");
 
-    print_string("Region Length: ");
+    // Set_Cursor_Position(position + 80);
+
+    print("Region Length: ");
     char b[10];
     int_to_ascii(memory_map->region_length, b);
-    print_string(b);
+    print(b);
 
-    Set_Cursor_Position(position + 160);
+    print("\n");
 
-    print_string("Region Type: ");
+    // Set_Cursor_Position(position + 160);
+
+    print("Region Type: ");
     char c[10];
     int_to_ascii(memory_map->region_type, c);
-    print_string(c);
+    print(c);
 
-    print_string("\n");
+    print("\n\n");
 
-    Set_Cursor_Position(position + 320);
+    // Set_Cursor_Position(position + 320);
 }

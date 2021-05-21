@@ -1,10 +1,8 @@
+#pragma once
+
+#include "interrupt_handlers.c"
 #include "../drivers/print_string.c"
-#include "../drivers/essentials.c"
-
-#define KERNEL_CS 0x08
-#define IDT_ENTRIES 256
-
-int timer_counter = 0;
+#include "../memory/buffers.c"
 
 typedef struct {
     unsigned short low_offset; /* Lower 16 bits of handler function address */
@@ -241,11 +239,10 @@ void isr_handler(registers_t r) {
 void irq_handler(registers_t r){
     if(r.int_no == 32){
         timer_counter++;
+        // print_string("timer\n");
     }
-    else{
-        char s[3];
-        int_to_ascii(r.int_no, s);
-        print_string(s);
+    else if(r.int_no == 33){
+        handle_keyboard_interrupt();
     }
     // print_string("received interrupt irq_handler");
     // char s[3];
@@ -253,4 +250,5 @@ void irq_handler(registers_t r){
     // print_string(s);
     // print_string("\n");
     outputbyte(0x20, 0x20); // EOI command to primary controller
+    outputbyte(0xa0, 0x20);
 }

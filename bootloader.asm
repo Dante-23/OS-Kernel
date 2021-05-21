@@ -65,7 +65,7 @@ KERNEL_MEMORY_LOCATION equ 0x1000			; Main memory address where kernel will be l
 [bits 16]
 Load_Kernel:
 	mov bx, KERNEL_MEMORY_LOCATION			; memory location where kernel will be loaded
-	mov al, 0x10								; number of sectors requested to read
+	mov al, 0x1e								; number of sectors requested to read
 	call disk_read							; call disk_load defined in disk_load.asm
 	ret
 
