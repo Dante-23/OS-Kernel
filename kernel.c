@@ -11,6 +11,7 @@ int _main(){
     // __asm__ __volatile__("int $3");
 	asm volatile("sti");
 	init_timer(50);
+	initialize_main_memory_map();
 	print("Enter Command: ");
 	// char s[3];
 	// int_to_ascii(*memory_regions, s);

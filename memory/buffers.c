@@ -16,11 +16,20 @@ char int_string[NUMBER_BUFFER_SIZE];
 unsigned char vga_row_data[COLUMNS + 1];
 unsigned char keyboard_input[KEYBOARD_INPUT_SIZE];
 
-int timer_counter = 0;
+unsigned long long timer_counter = 0;
 unsigned short Cursor_Position = 0;
 unsigned short keyboard_index = 0;
 
 unsigned char UPPERCASE = 0;
+
+//////////////////////////////////////////////////////////////////////////
+//////// Memory Part /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+#define MEMORY_MAP_SIZE 10
+#define BITMAP_SIZE 39000
+#define BITMAP_BLOCK_SIZE sizeof(unsigned int)
+#define PAGE_SIZE 4096
 
 struct Memory_Map{
     unsigned long long base_address;
@@ -29,4 +38,16 @@ struct Memory_Map{
     unsigned int extended_attributes;
 };
 
+unsigned int bitmap[BITMAP_SIZE];
+
+unsigned long long memory_size = 0;
+
 unsigned char* memory_regions = (unsigned char*)(0x6000);
+
+struct Memory_Map* type_1_memory_map[MEMORY_MAP_SIZE];
+
+unsigned char type_1_index = 0;
+
+//////////////////////////////////////////////////////////////////////////
+//////// Memory Part /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////

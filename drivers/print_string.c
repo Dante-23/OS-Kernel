@@ -73,6 +73,10 @@ char* hex_to_string(int number){
 
 char* int_to_string(int number){
     int index = 0;
+    if(number < 0){
+        int_string[index++] = '-';
+        number = -number;
+    }
     while(number > 0){
         int value = number % 10;
         int_string[index++] = (char)(value + 48);

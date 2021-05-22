@@ -33,11 +33,37 @@ void handle_enter(){
             print_memory_map(mp, Cursor_Position);
         }
     }
+    else if(strcmp(keyboard_input, (unsigned char*)"umemory map")){
+        get_type_1_memory_map();
+        for(unsigned char index = 0; index < type_1_index; index++){
+            print_memory_map(type_1_memory_map[index], Cursor_Position);
+        }
+    }
+    else if(strcmp(keyboard_input, (unsigned char*)"memory size")){
+        print("\n");
+        print(int_to_string(memory_size));
+        print("\n\n");
+    }
     else if(strcmp(keyboard_input, (unsigned char*)"help")){
         print("\n");
         print("Supported commands\n");
         print("help\n");
+        print("timer\n");
+        print("umemory map\n");
+        print("memory size\n");
         print("memory map\n\n");
+    }
+    else if(strcmp(keyboard_input, (unsigned char*)"timer")){
+        print("\n");
+        print("Current timer value: ");
+        print(int_to_string(timer_counter));
+        print("\n\n");
+    }
+    else if(strcmp(keyboard_input, (unsigned char*)"address")){
+        print("\n");
+        print("Address: ");
+        print(int_to_string((unsigned int)(bitmap + BITMAP_SIZE)));
+        print("\n\n");
     }
     else{
         print("Unknown input\n\n");
