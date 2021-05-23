@@ -82,9 +82,10 @@ char* int_to_string(int number){
         int_string[index++] = (char)(value + 48);
         number = number / 10;
     }
+    if(index == 0) int_string[index++] = '0';
+    int_string[index++] = '\0';
     int size = strlen(int_string);
     reverse(int_string, size);
-    int_string[index++] = '\0';
     return int_string;
 }
 

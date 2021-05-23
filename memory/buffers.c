@@ -27,9 +27,12 @@ unsigned char UPPERCASE = 0;
 //////////////////////////////////////////////////////////////////////////
 
 #define MEMORY_MAP_SIZE 10
-#define BITMAP_SIZE 39000
-#define BITMAP_BLOCK_SIZE sizeof(unsigned int)
+#define BITMAP_SIZE 1200
+#define BITMAP_BLOCK_SIZE 32
 #define PAGE_SIZE 4096
+
+unsigned int BITMAP_ACTUAL_SIZE = 0;
+unsigned char last_block_bits = 0;
 
 struct Memory_Map{
     unsigned long long base_address;
@@ -41,6 +44,7 @@ struct Memory_Map{
 unsigned int bitmap[BITMAP_SIZE];
 
 unsigned long long memory_size = 0;
+unsigned long long actual_memory_size = 0;
 
 unsigned char* memory_regions = (unsigned char*)(0x6000);
 

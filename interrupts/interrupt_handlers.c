@@ -41,6 +41,10 @@ void handle_enter(){
     }
     else if(strcmp(keyboard_input, (unsigned char*)"memory size")){
         print("\n");
+        print("Actual memory size: ");
+        print(int_to_string(actual_memory_size));
+        print("\n");
+        print("memory size: ");
         print(int_to_string(memory_size));
         print("\n\n");
     }
@@ -51,6 +55,7 @@ void handle_enter(){
         print("timer\n");
         print("umemory map\n");
         print("memory size\n");
+        print("current blocks\n");
         print("memory map\n\n");
     }
     else if(strcmp(keyboard_input, (unsigned char*)"timer")){
@@ -61,8 +66,26 @@ void handle_enter(){
     }
     else if(strcmp(keyboard_input, (unsigned char*)"address")){
         print("\n");
-        print("Address: ");
+        print(int_to_string((unsigned int)bitmap));
+        print("\n");
         print(int_to_string((unsigned int)(bitmap + BITMAP_SIZE)));
+        print("\n\n");
+    }
+    else if(strcmp(keyboard_input, (unsigned char*)"current blocks")){
+        unsigned int free_blocks = get_number_of_free_blocks();
+        unsigned int alloc_blocks = get_number_of_alloc_blocks();
+        print("\n");
+
+        print("Total blocks: ");
+        print(int_to_string(free_blocks + alloc_blocks));
+        print("\n");
+        print("Free blocks: ");
+        print(int_to_string(free_blocks));
+        print("\n");
+
+        print("Allocated blocks: ");
+        print(int_to_string(alloc_blocks));
+        print("\n");
         print("\n\n");
     }
     else{
