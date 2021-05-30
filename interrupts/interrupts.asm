@@ -37,6 +37,7 @@ irq_common_stub:
     mov es, ax
     mov fs, ax
     mov gs, ax
+    ; cli
     call irq_handler ; Different than the ISR code
     pop ebx  ; Different than the ISR code
     mov ds, bx
@@ -45,7 +46,7 @@ irq_common_stub:
     mov gs, bx
     popa
     add esp, 8
-    ;sti
+    ; sti
     iret 
 
 
@@ -365,7 +366,7 @@ irq5:
 	jmp irq_common_stub
 
 irq6:
-	cli
+    cli
 	push byte 6
 	push byte 38
 	jmp irq_common_stub

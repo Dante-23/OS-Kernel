@@ -1,6 +1,7 @@
 // #include "drivers/print_string.c"
 #include "interrupts/interrupts.c"
 #include "memory/memory.c"
+#include "interrupts/floppy_disk.c"
 
 int _main(){
 	isr_install();
@@ -11,36 +12,32 @@ int _main(){
     // __asm__ __volatile__("int $3");
 	asm volatile("sti");
 	init_timer(50);
+	// unsigned char msr = inputbyte(0x3f4);
+	// print("Master Status Register value: ");
+	// print(int_to_string(msr));
+	// print("\n");
+
 	initialize_main_memory_map();
+	unsigned int address = (unsigned int)allocate(25);
+	print("address: ");
+	print(int_to_string(address));
+	print("\n");
+	deallocate((void*)address);
+	unsigned int address1 = (unsigned int)allocate(500);
+	print("address1: ");
+	print(int_to_string(address1));
+	print("\n");
+
+	print("Supported commands\n");
+	print("help\n");
+	print("timer\n");
+	print("umemory map\n");
+	print("memory size\n");
+	print("current blocks\n");
+	print("memory map\n\n");
 	print("Enter Command: ");
-	// char s[3];
-	// int_to_ascii(*memory_regions, s);
-	// print_string(s);
-	// print_string("\n");
-	// print_string("Testing");
-	// print_string("\n");
-	// print_string("Testing 1");
-	// print_string("\n");
-	// print_char('a');
-
-	// scroll_screen();
-
-	// int number = 0x512;
-	// print_string(hex_to_string(number));
-	// print_string("\n");
-
-	// print_string(int_to_string(number));
-	// print_string("\n");
-	
-	// for(unsigned char i = 0; i < *memory_regions; i++){
-	// 	struct Memory_Map* mp = (struct Memory_Map*)0x5000;
-	// 	mp += i;
-	// 	print_memory_map(mp, Cursor_Position);
-	// }
-	// print_string("hsdkashdkashdkajshdkajsdhkjashdkjashdkjashdjkahdkjahsdkjashdjkashdthethehehehhetiyoyoyouoouooyoyoyoyo", position);
 }
 
 int _start(){
-	unsigned char* vga = (unsigned char*)0xb8000;
-	*vga = 'Q';
+
 }

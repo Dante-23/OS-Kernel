@@ -58,6 +58,14 @@ void deallocate_block(unsigned int block){
     bitmap[bitmap_block] &= ~(1 << bitmap_block_bit);
 }
 
+unsigned char is_allocated(unsigned int block){
+    unsigned int bitmap_block = block / BITMAP_BLOCK_SIZE;
+    unsigned int bitmap_block_bit = block % BITMAP_BLOCK_SIZE;
+    if((bitmap[bitmap_block] & (1 << bitmap_block_bit)) == 0)
+        return 0;
+    else return 1;
+}
+
 unsigned int get_number_of_free_blocks(){
     unsigned int free_blocks = 0;
     for(unsigned int bit = 0; bit < BITMAP_BLOCK_SIZE; bit++){
@@ -69,6 +77,27 @@ unsigned int get_number_of_free_blocks(){
         }
     }
     return free_blocks;
+}
+
+void* allocate(unsigned short bytes){
+    unsigned int blocks = get_blocks(bytes), region_index = 0;
+    for(unsigned char reg = 0; reg < *memory_regions; reg++){
+        struct Memory_Map* current_mp = (struct Memory_Map*)0x5000;
+        current_mp += reg;
+        if(current_mp->region_type != 1) continue;
+        unsigned int current_type_blocks = get_blocks(current_mp->region_length);
+        unsigned int previous_blocks = get_blocks(current_mp->base_address);
+        for(unsigned int block = previous_blocks; block < (current_type_blocks + previous_blocks); block++){
+            if(is_allocated(block)) continue;
+            allocate_block(block);
+            return (void*)(block * PAGE_SIZE);
+        }
+    }
+    return (void*)0;
+}
+
+void deallocate(void* address){
+    deallocate_block((unsigned int)(address) / PAGE_SIZE);
 }
 
 unsigned int get_number_of_alloc_blocks(){
@@ -92,9 +121,13 @@ void initialize_main_memory_map(){
     }
     if(last_block_bits == 0) last_block_bits = BITMAP_BLOCK_SIZE;
 
-    print("Bit map actual size: ");
-    print(int_to_string(BITMAP_ACTUAL_SIZE));
-    print("\n");
+    // print("bit map actual size: ");
+    // print(int_to_string(BITMAP_ACTUAL_SIZE));
+    // print("\n");
+
+    // print("last block bits: ");
+    // print(int_to_string(last_block_bits));
+    // print("\n");
 
     // print(int_to_string(last_block_bits));
     // print("\n");
@@ -105,7 +138,7 @@ void initialize_main_memory_map(){
     //     bitmap[i] = 0;
 
     unsigned int cnt = 0;
-    for(unsigned int block = 0; block < 17; block++){
+    for(unsigned int block = 0; block < 77; block++){
         allocate_block(block);
         cnt++;
     }
@@ -117,16 +150,19 @@ void initialize_main_memory_map(){
             // other than type 1 cannot be used by us as of now.
             unsigned int current_type_blocks = get_blocks(mp->region_length);
             unsigned int previous_blocks = get_blocks(mp->base_address);
-            print(int_to_string(previous_blocks));
-            print("-");
-            print(int_to_string(current_type_blocks + previous_blocks - 1));
-            print("\n");
+            // print("Memory regions currently being used: \n");
+            // print(int_to_string(previous_blocks));
+            // print(" - ");
+            // print(int_to_string(current_type_blocks + previous_blocks - 1));
+            // print("\n");
             for(unsigned int block = previous_blocks; block < (current_type_blocks + previous_blocks); block++){
                 allocate_block(block);
                 cnt++;
             }
         }
     }
-    print(int_to_string(cnt));
-    print("\n");
+    // print("Loop ran for ");
+    // print(int_to_string(cnt));
+    // print(" times.");
+    // print("\n");
 }

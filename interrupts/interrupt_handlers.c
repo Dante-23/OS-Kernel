@@ -1,6 +1,18 @@
+#pragma once
+
 #include "../drivers/print_string.c"
 #include "../drivers/essentials.c"
 #include "../memory/memory.c"
+
+unsigned long long get_tick_count(){
+    return timer_counter;
+}
+
+void sleep (int ms) {
+	int ticks = ms + get_tick_count();
+	while (ticks > get_tick_count ())
+		;
+}
 
 void handle_backspace(){
     if(keyboard_index > 0){
@@ -56,6 +68,7 @@ void handle_enter(){
         print("umemory map\n");
         print("memory size\n");
         print("current blocks\n");
+        print("user allocated blocks\n");
         print("memory map\n\n");
     }
     else if(strcmp(keyboard_input, (unsigned char*)"timer")){
@@ -63,6 +76,22 @@ void handle_enter(){
         print("Current timer value: ");
         print(int_to_string(timer_counter));
         print("\n\n");
+    }
+    else if(strncmp(keyboard_input, (unsigned char*)"allocate", 0, 7)){
+        unsigned short len = strlen(keyboard_input);
+        char* bytes = substr(keyboard_input, 9, len);
+        unsigned int number = mystoi(bytes);
+        void* address = allocate(number);
+        print("Allocated memory start address: ");
+        print(int_to_string((unsigned int)address));
+        print("\n\n");
+    }
+    else if(strncmp(keyboard_input, (unsigned char*)"deallocate", 0, 9)){
+        unsigned short len = strlen(keyboard_input);
+        char* address = substr(keyboard_input, 11, len);
+        unsigned int number = mystoi(address);
+        deallocate((void*)number);
+        print("deallocated\n\n");
     }
     else if(strcmp(keyboard_input, (unsigned char*)"address")){
         print("\n");
@@ -74,6 +103,10 @@ void handle_enter(){
     else if(strcmp(keyboard_input, (unsigned char*)"current blocks")){
         unsigned int free_blocks = get_number_of_free_blocks();
         unsigned int alloc_blocks = get_number_of_alloc_blocks();
+        print("\n");
+        
+        print("Bit Map size: ");
+        print(int_to_string(BITMAP_ACTUAL_SIZE));
         print("\n");
 
         print("Total blocks: ");

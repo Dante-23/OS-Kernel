@@ -2,47 +2,39 @@
 #include <stdlib.h>
 using namespace std;
 
-char int_string[512];
+char hex_string[128];
 
-int strlen(char s[]){
-    char *ptr = s;
-    while(*ptr != '\0') ptr++;
-    return ptr - s;
+char* substr(char* str, unsigned int start_index, unsigned int end_index){
+    unsigned int index = 0;
+    while(start_index <= end_index) hex_string[index++] = str[start_index++];
+    return hex_string;
 }
 
-void reverse(char s[], int size){
-    unsigned int i = 0, j = size - 1;
-    while(i < j){
-        char ch = s[i];
-        s[i] = s[j];
-        s[j] = ch;
-        i++;
-        j--;
+unsigned char strncmp(char* str, char* param, unsigned int start_index, unsigned int end_index){
+    while(start_index <= end_index){
+        if(str[start_index] == param[start_index]) start_index++;
+        else break;
     }
+    return (start_index > end_index);
 }
 
-char* int_to_string(int number){
-    int index = 0;
-    if(number < 0){
-        int_string[index++] = '-';
-        number = -number;
+unsigned int mystoi(char* str){
+    unsigned int number = 0;
+    while(*str != '\0'){
+        unsigned int digit = (unsigned int)(*str - 48);
+        number = (number * 10) + digit;
+        str++;
     }
-    while(number > 0){
-        int value = number % 10;
-        int_string[index++] = (char)(value + 48);
-        number = number / 10;
-    }
-    int size = strlen(int_string);
-    reverse(int_string, size);
-    int_string[index++] = '\0';
-    return int_string;
+    return number;
 }
 
 int main(){
-    cout << int_to_string(223) << endl;
-    // unsigned int j = 0xffffffff;
-    // for(unsigned int i = 0; i < 32; i++){
-    //     // j += (1 << i);
-    // }
-    // cout << j << endl;
+    cout << mystoi((char*)"1253") << endl;
 }
+
+
+
+
+
+
+

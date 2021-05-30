@@ -27,9 +27,9 @@ unsigned char UPPERCASE = 0;
 //////////////////////////////////////////////////////////////////////////
 
 #define MEMORY_MAP_SIZE 10
-#define BITMAP_SIZE 1200
+#define BITMAP_SIZE 5000
 #define BITMAP_BLOCK_SIZE 32
-#define PAGE_SIZE 4096
+#define PAGE_SIZE 1024
 
 unsigned int BITMAP_ACTUAL_SIZE = 0;
 unsigned char last_block_bits = 0;
