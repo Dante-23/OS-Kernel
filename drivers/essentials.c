@@ -5,12 +5,6 @@
 #define get_low_16(address) (unsigned short)((address) & 0xFFFF)
 #define get_high_16(address) (unsigned short)(((address) >> 16) & 0xFFFF)
 
-void memory_copy(char *source, char *dest, int nbytes) {
-    for (int i = 0; i < nbytes; i++) {
-        *(dest + i) = *(source + i);
-    }
-}
-
 int strlen(char s[]){
     char *ptr = s;
     while(*ptr != '\0') ptr++;

@@ -4,6 +4,19 @@
 #include "../drivers/essentials.c"
 #include "../memory/memory.c"
 
+void print_help(){
+    print("\n");
+    print("(1) Supported commands\n");
+    print("(2) help\n");
+    print("(3) timer\n");
+    print("(4) umemory map\n");
+    print("(5) memory size\n");
+    print("(6) current blocks\n");
+    print("(7) allocated {bytes}\n");
+    print("(8) deallocated {address}\n");
+    print("(9) memory map\n\n");
+}
+
 unsigned long long get_tick_count(){
     return timer_counter;
 }
@@ -53,27 +66,19 @@ void handle_enter(){
     }
     else if(strcmp(keyboard_input, (unsigned char*)"memory size")){
         print("\n");
-        print("Actual memory size: ");
+        print("Actual memory size:     ");
         print(int_to_string(actual_memory_size));
         print("\n");
-        print("memory size: ");
+        print("memory size:            ");
         print(int_to_string(memory_size));
         print("\n\n");
     }
     else if(strcmp(keyboard_input, (unsigned char*)"help")){
-        print("\n");
-        print("Supported commands\n");
-        print("help\n");
-        print("timer\n");
-        print("umemory map\n");
-        print("memory size\n");
-        print("current blocks\n");
-        print("user allocated blocks\n");
-        print("memory map\n\n");
+        print_help();
     }
     else if(strcmp(keyboard_input, (unsigned char*)"timer")){
         print("\n");
-        print("Current timer value: ");
+        print("Current timer value:    ");
         print(int_to_string(timer_counter));
         print("\n\n");
     }
@@ -82,7 +87,7 @@ void handle_enter(){
         char* bytes = substr(keyboard_input, 9, len);
         unsigned int number = mystoi(bytes);
         void* address = allocate(number);
-        print("Allocated memory start address: ");
+        print("Allocated start address: ");
         print(int_to_string((unsigned int)address));
         print("\n\n");
     }
@@ -105,18 +110,18 @@ void handle_enter(){
         unsigned int alloc_blocks = get_number_of_alloc_blocks();
         print("\n");
         
-        print("Bit Map size: ");
+        print("Bit Map size:           ");
         print(int_to_string(BITMAP_ACTUAL_SIZE));
         print("\n");
 
-        print("Total blocks: ");
+        print("Total blocks:           ");
         print(int_to_string(free_blocks + alloc_blocks));
         print("\n");
-        print("Free blocks: ");
+        print("Free blocks:            ");
         print(int_to_string(free_blocks));
         print("\n");
 
-        print("Allocated blocks: ");
+        print("Allocated blocks:       ");
         print(int_to_string(alloc_blocks));
         print("\n");
         print("\n\n");
@@ -124,7 +129,7 @@ void handle_enter(){
     else{
         print("Unknown input\n\n");
     }
-    print("Enter Command: ");
+    print("Enter Command:          ");
 }
 
 void print_letter(unsigned char scancode) {

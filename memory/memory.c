@@ -4,20 +4,20 @@
 
 void print_memory_map(struct Memory_Map* memory_map, unsigned short position){
 
-    print("Memory Base: ");
+    print("Region Base:            ");
     char a[10];
     int_to_ascii(memory_map->base_address, a);
     print(a);
 
     print("\n");
 
-    print("Region Length: ");
+    print("Region Length:          ");
     char b[10];
     int_to_ascii(memory_map->region_length, b);
     print(b);
     print("\n");
 
-    print("Region Type: ");
+    print("Region Type:            ");
     char c[10];
     int_to_ascii(memory_map->region_type, c);
     print(c);

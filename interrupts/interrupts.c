@@ -3,7 +3,7 @@
 #include "interrupt_handlers.c"
 #include "../drivers/print_string.c"
 #include "../memory/buffers.c"
-#include "floppy_disk.c"
+#include "floppy.c"
 
 typedef struct {
     unsigned short low_offset; /* Lower 16 bits of handler function address */
@@ -246,8 +246,9 @@ void irq_handler(registers_t r){
         handle_keyboard_interrupt();
     }
     else if(r.int_no == 38){
-        print("interrupt\n");
+        // print("floppy interrupt\n");
         i86_flpy_irq();
+        // handle_floppy_interrupt();
     }
     // print_string("received interrupt irq_handler");
     // char s[3];

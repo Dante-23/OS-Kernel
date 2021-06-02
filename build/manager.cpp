@@ -30,7 +30,8 @@ int main(){
 	commands.push_back("nasm memory/memory.asm -f elf -o bin/memory.o");
 	commands.push_back("x86_64-elf-ld -m elf_i386 -s -o bin/kernel.bin -Ttext 0x9001 bin/kernel_entry.o bin/interruptsasm.o bin/memory.o bin/kernel.o --oformat binary");
 	commands.push_back("nasm -fbin bootloader.asm -o bin/bootloader.bin");
-	commands.push_back("cat bin/bootloader.bin bin/kernel.bin > bin/os.bin");
+	commands.push_back("nasm -fbin kernel_16_bit/stage2.asm -o bin/stage2.bin");
+	commands.push_back("cat bin/bootloader.bin bin/stage2.bin bin/kernel.bin > bin/os.bin");
 	commands.push_back("cp bin/os.bin /mnt/c/Users/dante23/Desktop/\"8th Semester OS Project\"/myos");
 	
 	for(string command: commands){
