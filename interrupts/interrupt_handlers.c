@@ -3,28 +3,36 @@
 #include "../drivers/print_string.c"
 #include "../drivers/essentials.c"
 #include "../memory/memory.c"
+#include "../file_system/fat12.c"
+
+void print_sector(unsigned char* sector){
+	int i = 0;
+	for ( int c = 0; c < 4; c++ ) {
+
+		for (int j = 0; j < 128; j++){
+			print(hex_to_string(sector[i + j]));
+			print(" ");
+		}
+			// DebugPrintf ("0x%x ", sector[ i + j ]);
+		i += 128;
+		// DebugPrintf("\n\rPress any key to continue\n\r");
+		// getch ();
+	}
+}
 
 void print_help(){
     print("\n");
-    print("(1) Supported commands\n");
-    print("(2) help\n");
-    print("(3) timer\n");
-    print("(4) umemory map\n");
-    print("(5) memory size\n");
-    print("(6) current blocks\n");
-    print("(7) allocated {bytes}\n");
-    print("(8) deallocated {address}\n");
-    print("(9) memory map\n\n");
-}
-
-unsigned long long get_tick_count(){
-    return timer_counter;
-}
-
-void sleep (int ms) {
-	int ticks = ms + get_tick_count();
-	while (ticks > get_tick_count ())
-		;
+    print("----- Supported commands -----\n");
+    print("(1) help\n");
+    print("(2) timer\n");
+    print("(3) umemory map\n");
+    print("(4) memory size\n");
+    print("(5) current blocks\n");
+    print("(6) allocate {bytes}\n");
+    print("(7) deallocate {address}\n");
+    print("(8) bpb\n");
+    print("(9) ls\n");
+    print("(10) memory map\n\n");
 }
 
 void handle_backspace(){
@@ -103,6 +111,36 @@ void handle_enter(){
         print(int_to_string((unsigned int)bitmap));
         print("\n");
         print(int_to_string((unsigned int)(bitmap + BITMAP_SIZE)));
+        print("\n\n");
+    }
+    else if(strcmp(keyboard_input, (unsigned char*)"ls")){
+        print("\n");
+        // floppy_read_sector(0);
+        outputbyte(0x20, 0x20); // EOI command to primary controller
+        outputbyte(0xa0, 0x20);
+        print_root_directory_table();
+        print("\n\n");
+    }
+    else if(strcmp(keyboard_input, (unsigned char*)"bpb")){
+        print("\n");
+        outputbyte(0x20, 0x20); // EOI command to primary controller
+        outputbyte(0xa0, 0x20);
+        read_boot_sector();
+        print("\n\n");
+    }
+    else if(strncmp(keyboard_input, (unsigned char*)"read", 0, 3)){
+        unsigned short len = strlen(keyboard_input);
+        char* filename = substr(keyboard_input, 5, len - 1);
+        filename[len] = '\0';
+        print("Filename:               ");
+        print(filename);
+        print("\n");
+        outputbyte(0x20, 0x20); // EOI command to primary controller
+        outputbyte(0xa0, 0x20);
+        unsigned char* file_contents = (unsigned char*)allocate(1024);
+        read_file(filename, file_contents);
+        print_sector(file_contents);
+        deallocate((void*)file_contents);
         print("\n\n");
     }
     else if(strcmp(keyboard_input, (unsigned char*)"current blocks")){
@@ -412,6 +450,14 @@ void print_letter(unsigned char scancode) {
             break;
         case 0x41:
             UPPERCASE = !UPPERCASE;
+            break;
+        case 0x48:
+            // Up arrow key
+            print("up\n");
+            break;
+        case 0x50:
+            // Down arrow key
+            print("down\n");
             break;
         default:
             /* 'keuyp' event corresponds to the 'keydown' + 0x80 

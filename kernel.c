@@ -1,7 +1,9 @@
 // #include "drivers/print_string.c"
+// #pragma once
+
 #include "interrupts/interrupts.c"
 #include "memory/memory.c"
-#include "interrupts/floppy.c"
+// #include "interrupts/floppy.c"
 #include "file_system/fat12.c"
 
 // void flpydsk_write_sector_imp (unsigned char head, unsigned char track, unsigned char sector) {
@@ -37,14 +39,6 @@
 // 	flpydsk_check_int (&st0,&cyl);
 // }
 
-void write_512_bytes(char* address, char ch){
-	char* ptr = address;
-	while(ptr < (address + 512)){
-		*ptr = ch;
-		ptr++;
-	}
-}
-
 int _main(){
 	isr_install();
 	unsigned short position = Get_Cursor_Position_From_Coord(0,0);
@@ -64,6 +58,7 @@ int _main(){
 
 // 	//! install floppy disk to IR 38, uses IRQ 6
 	// print("here\n");
+	// asm volatile("sti");
 	floppy_install(38);
 
 	// print("After install\n");
@@ -71,8 +66,11 @@ int _main(){
 // 	//! set DMA buffer to 64k
 	floppy_set_dma (0x1000);
 
-	read_boot_sector();
-
+	// read_boot_sector();
+	init_filesystem();
+	// print_fat();
+	// print_root_directory_table();
+	// print_root_directory_table();
 	// unsigned char* sector = flpydsk_read_sector (0);
 // //
 // //

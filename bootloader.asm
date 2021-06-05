@@ -1,5 +1,6 @@
 [org 0x7c00]
 STAGE2_LOAD_LOCATION equ 0x7e00
+STAGE2_KERNEL_LOCATION equ 0x8600					; Currently this is not used
 
 	ignore db "ig", 0                               ; Ignore first 3 bytes
 	bpbOEM			db "NANO-OS ", 0				; This member must be exactally 8 bytes. It is just; the name of your OS :) Everything else remains the same.
@@ -7,11 +8,11 @@ STAGE2_LOAD_LOCATION equ 0x7e00
 	bpbBytesPerSector  	dw 512
 	bpbSectorsPerCluster 	db 1
 	bpbReservedSectors	dw 1
-	bpbNumberOfFATs	    db 2
-	bpbRootEntries 	    dw 224
+	bpbNumberOfFATs	    db 1			; Originally it was 2
+	bpbRootEntries 	    dw 160			; Originally it was 224
 	bpbTotalSectors 	    dw 2880
 	bpbMedia 	            db 0xF0
-	bpbSectorsPerFAT 	    dw 10
+	bpbSectorsPerFAT 	    dw 10		; Originally it was 10
 	bpbSectorsPerTrack	 	dw 18
 	bpbHeadsPerCylinder 	dw 2
 	bpbHiddenSectors 	    dd 0
@@ -21,15 +22,15 @@ STAGE2_LOAD_LOCATION equ 0x7e00
 	bsUnused 	            db 0
 	bsExtBootSignature 	db 0x29
 	bsSerialNumber	        dd 0xa0a1a2a3
-	bsVolumeLabel 	        db "MOS FLOPPY ", 0
-	bsFileSystem 	        db "FAT12   ", 0
+	; bsVolumeLabel 	        db "MOS FLOPPY ", 0
+	; bsFileSystem 	        db "FAT12   ", 0
 
 	mov bp, 0x9000								; Update stack pointer and base pointer. Not Needed
 	mov sp, bp
 
-	; mov bx, KERNEL_LOAD_SUCCESS_MESSAGE
-	; call Print
-	; call Print_nl
+	mov bx, KERNEL_LOAD_SUCCESS_MESSAGE
+	call Print
+	call Print_nl
 	
 	call Load_Kernel
 
@@ -74,7 +75,7 @@ Load_Kernel:
 ; DISK_LOADING_MESSAGE db "Loading from disk", 0
 ; REAL_MODE_MESSAGE db "Loading in real mode", 0
 ;KERNEL_LOAD_MESSAGE db "Loading kernel in real mode", 0
-; KERNEL_LOAD_SUCCESS_MESSAGE db "Successfully loaded kernel", 0
+KERNEL_LOAD_SUCCESS_MESSAGE db "Successfully loaded kernel", 0
 ;PROTECTED_MODE_MESSAGE db "Going to protected mode", 0
 ; PROTECTED_MODE_SUCCESS_MESSAGE db "Successfully entered protected mode", 0
 ; CONTANTS and MESSAGES END

@@ -16,6 +16,8 @@
 /**
 *	2 DMACs, 32 bit master & 16bit slave each having 8 channels
 */
+#pragma once
+
 #define DMA_MAX_CHANNELS 16
 #define DMA_CHANNELS_PER_DMAC 8
 

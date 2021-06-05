@@ -5,6 +5,12 @@
 #define get_low_16(address) (unsigned short)((address) & 0xFFFF)
 #define get_high_16(address) (unsigned short)(((address) >> 16) & 0xFFFF)
 
+void memory_copy(unsigned char* a, unsigned char* b, unsigned short bytes){
+    // copy byte by byte from a to b
+    for(unsigned short i = 0; i < bytes; i++)
+        b[i] = a[i];
+}
+
 int strlen(char s[]){
     char *ptr = s;
     while(*ptr != '\0') ptr++;
@@ -50,7 +56,7 @@ unsigned char strcmp(char* a, char* b){
     unsigned char ok = 0;
     while(!ok){
         if(*a != *b) return ok;
-        else if(*a == '\0') ok = 1;
+        else if(*a == '\0' || *b == '\0') ok = 1;
         a++;
         b++;
     }

@@ -33,7 +33,7 @@ init_pm:
     mov fs, ax
     mov gs, ax
 
-    mov ebp, 0x90000
+    mov ebp, 0x7bff
     mov esp, ebp
 
     call Begin_PM

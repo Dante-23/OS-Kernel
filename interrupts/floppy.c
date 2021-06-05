@@ -193,6 +193,16 @@ unsigned char _FloppyDiskIRQ = 0;
 //    IMPLEMENTATION PRIVATE FUNCTIONS
 //============================================================================
 
+unsigned long long get_tick_count(){
+    return timer_counter;
+}
+
+void sleep (int ms) {
+	int ticks = ms + get_tick_count();
+	while (ticks > get_tick_count ())
+		;
+}
+
 /**
 *	DMA Routines.
 */
@@ -294,7 +304,10 @@ void floppy_write_ccr (unsigned char val) {
 void floppy_wait_irq () {
 
 	//! wait for irq to fire
-	while ( _FloppyDiskIRQ == 0);
+	while ( _FloppyDiskIRQ == 0){
+		// print(int_to_string(timer_counter));
+		// print("\n");
+	}
 	_FloppyDiskIRQ = 0;
 }
 
@@ -302,9 +315,9 @@ void floppy_wait_irq () {
 //!	floppy disk irq handler
 void i86_flpy_irq () {
 
-	// _asm add esp, 12
-	// _asm pushad
-	// _asm cli
+	// asm volatile ("add %esp, 12");
+	// asm volatile ("pusha");
+	// asm volatile ("cli");
 
 	//! irq fired
 	_FloppyDiskIRQ = 1;
@@ -312,9 +325,9 @@ void i86_flpy_irq () {
 	//! tell hal we are done
 	// interruptdone( FLOPPY_IRQ );
 
-	// _asm sti
-	// _asm popad
-	// _asm iretd
+	// asm volatile ("sti");
+	// asm volatile ("popa");
+	// asm volatile ("iret");
 }
 
 /**
@@ -525,6 +538,8 @@ void floppy_install (int irq) {
 	//! install irq handler
 	// setvect (irq, i86_flpy_irq);
 
+	asm volatile("sti");
+
 	//! reset the fdc
 	floppy_reset ();
 
@@ -547,7 +562,9 @@ unsigned char floppy_get_working_drive () {
 
 //! read a sector
 unsigned char* floppy_read_sector (int sectorLBA) {
+	// asm volatile("sti");
 	floppy_install(38);
+	// floppy_reset();
 	if (_CurrentDrive >= 4)
 		return 0;
 
@@ -609,6 +626,7 @@ void floppy_write_sector_imp (unsigned char head, unsigned char track, unsigned 
 }
 
 unsigned char floppy_write_sector (int sectorLBA) {
+	// asm volatile("sti");
 	floppy_install(38);
 	if (_CurrentDrive >= 4)
 		return 0;

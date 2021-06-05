@@ -1,6 +1,6 @@
 disk_read:
     mov ah, 0x2                         ; tells BIOS it is read disk
-    mov dh, 0x0                         ; head number
+    mov dh, 0x1                         ; head number
 
     mov [SECTORS_READ_REQUESTED], al    ; Store number of sectors requested in a variable so that we can verify whether number of sector
                                         ; requested is same as number of sectors actually read

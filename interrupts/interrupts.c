@@ -103,6 +103,20 @@ void set_idt() {
     __asm__ ("lidt %0" : : "m" (idt_reg));
 }
 
+void remap_pic(){
+    // Remap the PIC
+    outputbyte(0x20, 0x11);
+    outputbyte(0xA0, 0x11);
+    outputbyte(0x21, 0x20);
+    outputbyte(0xA1, 0x28);
+    outputbyte(0x21, 0x04);
+    outputbyte(0xA1, 0x02);
+    outputbyte(0x21, 0x01);
+    outputbyte(0xA1, 0x01);
+    outputbyte(0x21, 0x0);
+    outputbyte(0xA1, 0x0); 
+}
+
 void isr_install() {
     set_idt_gate(0, (unsigned int)isr0);
     set_idt_gate(1, (unsigned int)isr1);
@@ -136,18 +150,8 @@ void isr_install() {
     set_idt_gate(29, (unsigned int)isr29);
     set_idt_gate(30, (unsigned int)isr30);
     set_idt_gate(31, (unsigned int)isr31);
-    
-    // Remap the PIC
-    outputbyte(0x20, 0x11);
-    outputbyte(0xA0, 0x11);
-    outputbyte(0x21, 0x20);
-    outputbyte(0xA1, 0x28);
-    outputbyte(0x21, 0x04);
-    outputbyte(0xA1, 0x02);
-    outputbyte(0x21, 0x01);
-    outputbyte(0xA1, 0x01);
-    outputbyte(0x21, 0x0);
-    outputbyte(0xA1, 0x0); 
+
+    remap_pic();
 
     // Install the IRQs
     set_idt_gate(32, (unsigned int)irq0);
@@ -250,11 +254,14 @@ void irq_handler(registers_t r){
         i86_flpy_irq();
         // handle_floppy_interrupt();
     }
-    // print_string("received interrupt irq_handler");
-    // char s[3];
-    // int_to_ascii(r.int_no, s);
-    // print_string(s);
-    // print_string("\n");
+    else{
+        // print("other interrupts\n");
+    }
+    // Quick fix, find a proper solution to it
+    // asm volatile("cli");
+    // remap_pic();
+    // asm volatile("sti");
+    // Quick fix, find a proper solution to it
     outputbyte(0x20, 0x20); // EOI command to primary controller
     outputbyte(0xa0, 0x20);
 }

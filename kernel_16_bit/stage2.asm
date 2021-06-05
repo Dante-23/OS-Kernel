@@ -4,7 +4,7 @@
 ; From third sector it is out 32 bit kernel
 
 [org 0x7e00]
-KERNEL_MEMORY_LOCATION equ 0x9001			; Main memory address where kernel will be loaded
+KERNEL_MEMORY_LOCATION equ 0x8312			; Main memory address where kernel will be loaded
 
 call Clear_Screen
 
